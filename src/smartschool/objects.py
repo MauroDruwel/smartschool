@@ -164,7 +164,7 @@ class _Result:
     date: DateTime
 
     gradebookOwner: Teacher
-    component: Component
+    component: Component | None
     courses: list[Course]
     period: Period
     feedback: list[Feedback]

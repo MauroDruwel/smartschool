@@ -28,7 +28,6 @@ class Results(SessionMixin, Iterable[ResultWithoutDetails]):
     """
 
     def __iter__(self) -> Iterator[ResultWithoutDetails]:
-        last_component = None
         for page_nr in count(start=1):  # pragma: no branch
             downloaded_webpage = self.session.get(f"/results/api/v1/evaluations/?pageNumber={page_nr}&itemsOnPage={RESULTS_PER_PAGE}")
             if not downloaded_webpage or not downloaded_webpage.content:
@@ -36,12 +35,6 @@ class Results(SessionMixin, Iterable[ResultWithoutDetails]):
 
             json = downloaded_webpage.json()
             for result in json:
-                component = result.get("component")
-                if component is not None:
-                    last_component = component
-                else:
-                    result["component"] = last_component
-                    
                 if result["graphic"]["value"] == "—":
                     result["graphic"]["value"] = -1
                     result["graphic"]["type"] = "percentage"
